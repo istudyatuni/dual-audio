@@ -5,8 +5,7 @@ def check_system_utilities():
 
 	missing = []
 	for u in utilities:
-		res = os.system(f'which {u} > /dev/null')
-		if res:
+		if os.system(f'which {u} > /dev/null'):
 			missing.append(u)
 
 	if len(missing) == 0:

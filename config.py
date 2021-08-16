@@ -1,4 +1,4 @@
-video_dir = 'video'
+video_cache_dir = 'video-cache'
 audio_dir = 'audio'
 
 needed_utilities = [
@@ -7,6 +7,6 @@ needed_utilities = [
 ]
 
 needed_dirs = [
-	video_dir,
+	video_cache_dir,
 	audio_dir,
 ]
