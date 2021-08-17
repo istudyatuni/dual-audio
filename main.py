@@ -25,7 +25,7 @@ def init_argparser():
 
 	# other
 	parser.add_argument('-d', '--out-dir', type=str, help='Directory where place audio and video folders', default='.')
-	parser.add_argument('--preserve-video', type=bool, help='Preserving main video', default=False)
+	parser.add_argument('--preserve-video', action='store_true', help='Preserving main video')
 	parser.add_argument('--args', type=str, help='File with shell arguments')
 
 	args = parser.parse_args()
