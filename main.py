@@ -1,16 +1,22 @@
 import argparse, os, shlex
 
-from config import video_cache_key, video_key, video_cache_dir, video_dir
-from converter import extract_audio
-from helpers import setup_checks
+from config import (
+	video_cache_key,
+	audio_key, video_key,
+	video_cache_dir, video_dir,
+	video_extension_key
+)
+from converter import extract_audio, append_audios
+from helpers import setup_checks, get_filenames
 from loader import load_files_from_list
-from playlist import read_playlist, parse_m3u
+from playlist import read_playlist
 
 def init_argparser():
 	parser = argparse.ArgumentParser(description='Make dual-audio movie')
 	parser.add_argument('-a', '--audio-playlists', nargs='*', help='Path(s) to playlist(s) with videos from which extract audio', default=[])
 	parser.add_argument('-v', '--video-playlists', nargs='*', help='Path(s) to playlist(s) with videos to add a second audio', default=[])
 	parser.add_argument('-d', '--out-dir', type=str, help='Directory where place audio and video folders', default='.')
+	parser.add_argument('--preserve-video', type=bool, help='Preserving main video', default=False)
 	parser.add_argument('--args', type=str, help='File with shell arguments')
 
 	args = parser.parse_args()
@@ -21,32 +27,44 @@ def init_argparser():
 
 	return args
 
-def main(audio_playlists, video_playlists, out_directory):
-	out_dir = os.path.abspath(out_directory)
+def main(audio_playlists, video_playlists, out_dir, preserve_video):
+	abs_out_dir = os.path.abspath(out_dir)
 
 	for p in audio_playlists:
-		content = read_playlist(os.path.abspath(p))
-		status, data = parse_m3u(content)
-
-		if status == False:
-			quit('Something wrong')
+		data = read_playlist(os.path.abspath(p))
 
 		# load videos for audio extracting
-		loaded_cache_videos = load_files_from_list(data, video_cache_key, out_dir, video_cache_dir)
-		extract_audio(loaded_cache_videos, video_cache_key, out_dir)
+		loaded_cache_videos = load_files_from_list(
+			data,
+			video_cache_key,
+			abs_out_dir,
+			video_cache_dir,
+			video_extension_key,
+		)
+		audio_index = extract_audio(loaded_cache_videos, video_cache_key, abs_out_dir)
 
 	for p in video_playlists:
-		content = read_playlist(os.path.abspath(p))
-		status, data = parse_m3u(content)
-
-		if status == False:
-			quit('Something wrong')
+		data = read_playlist(os.path.abspath(p))
 
 		# load videos for audio appending
-		loaded_videos = load_files_from_list(data, video_key, out_dir, video_dir)
-		print(loaded_videos)
+		videos_index = load_files_from_list(
+			data,
+			video_key,
+			abs_out_dir,
+			video_dir,
+			video_extension_key,
+		)
+
+	filenames = get_filenames(audio_index, videos_index)
+	append_audios(filenames, abs_out_dir, preserve_video)
 
 if __name__ == '__main__':
 	args = init_argparser()
 	setup_checks(args.out_dir)
-	main(args.audio_playlists, args.video_playlists, args.out_dir)
+	main(
+		args.audio_playlists,
+		args.video_playlists,
+		args.out_dir,
+		args.preserve_video
+	)
+	print('Done')
