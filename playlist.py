@@ -2,6 +2,8 @@ import os, re
 
 from config import video_extension_key, template_keys
 
+sorted_playlist_keys = sorted(['title', 'link', video_extension_key])
+
 def read_file_lines(name):
 	with open(name) as f:
 		return [x.strip() for x in f.readlines()]
@@ -16,6 +18,7 @@ def parse_playlist(content):
 		if re.match(r'#EXTINF:', line):
 			if buffer:
 				result.append(buffer)
+				buffer = {}
 
 			# get title
 			data = re.search(r'(?<=#EXTINF:).+', line).group(0)
@@ -30,7 +33,16 @@ def parse_playlist(content):
 				video_extension_key: re.search(r'\/[^?#]+\.(\w+)', line).group(1),
 			})
 
-	return True, result
+	if buffer:
+		result.append(buffer)
+
+	return validate_playlist_data(result), result
+
+def validate_playlist_data(parsed):
+	return all(
+		sorted(x.keys()) == sorted_playlist_keys
+		for x in parsed
+	)
 
 def read_playlist(name):
 	content = read_file_lines(name)
