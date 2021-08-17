@@ -9,10 +9,10 @@ def check_audio_format(filepath):
 	video_stats = get_system_output(('ffprobe', os.path.abspath(filepath)))
 	return re.search(r'Audio: (\w+)', video_stats).group(1)
 
-def extract_audio(videos, out_dir):
+def extract_audio(videos, cache_key, out_dir):
 	for v in videos:
-		video_file = os.path.join(out_dir, video_cache_dir, v['video_file'])
-		audio_format = check_audio_format(video_file)
+		video_cache_file = os.path.join(out_dir, video_cache_dir, v[cache_key])
+		audio_format = check_audio_format(video_cache_file)
 
 		audio_file = os.path.join(out_dir, audio_dir, f"{v['title']}.{audio_format}")
 		# https://stackoverflow.com/a/63237888
@@ -20,7 +20,7 @@ def extract_audio(videos, out_dir):
 		# -c copy is do not convert audio stream
 		res = os.system(f"""
 			ffmpeg -n \
-			-i '{video_file}' \
+			-i '{video_cache_file}' \
 			-map 0:a:0 \
 			-c copy '{audio_file}'
 		""")

@@ -5,3 +5,7 @@ video/
 video-cache/
 audio/
 *.sublime-workspace
+
+*.mp4
+*.mp3
+*.aac
