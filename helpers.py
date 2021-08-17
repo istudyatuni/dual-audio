@@ -45,7 +45,7 @@ def get_filenames(audio_index, video_index):
 	Get filenames from indexes
 
 	audio_index: see converter.py::extract_audio
-	video_index: see playlist.py::parse_m3u and loader.py
+	video_index: see playlist.py::parse_playlist and loader.py
 	"""
 	if len(audio_index) != len(video_index):
 		quit(f'Count of audios ({len(audio_index)}) and videos ({len(video_index)}) does not match')

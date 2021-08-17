@@ -70,6 +70,7 @@ def append_audios(filenames, abs_out_dir, preserve_video):
 		if os.path.exists(out_file) or is_video_finished(abs_out_dir, file[video_key]):
 			continue
 
+		# https://stackoverflow.com/a/11783474
 		result = os.system(f"""
 			ffmpeg \
 			-i '{video_path}' \

@@ -27,5 +27,7 @@ video_key = 'video_file'
 video_extension_key = 'video_extension'
 audio_extension_key = 'audio_extension'
 
-# playlist
-m3u_header_directive = '#EXTM3U'
+template_keys = {
+	'title': '<title>',
+	'link': '<link>',
+}
