@@ -5,7 +5,6 @@ video_dir = 'video'
 needed_utilities = [
 	'ffmpeg',
 	'wget',
-	'bash',
 ]
 
 needed_dirs = [
@@ -13,6 +12,8 @@ needed_dirs = [
 	video_cache_dir,
 	video_dir,
 ]
+
+partial_postfix = '-partial'
 
 # keys
 video_cache_key = 'video_cache_file'

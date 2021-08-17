@@ -1,6 +1,6 @@
 import argparse, os, shlex
 
-from config import video_cache_key
+from config import video_cache_key, video_key, video_cache_dir, video_dir
 from converter import extract_audio
 from helpers import setup_checks
 from loader import load_files_from_list
@@ -21,7 +21,9 @@ def init_argparser():
 
 	return args
 
-def main(audio_playlists, out_directory):
+def main(audio_playlists, video_playlists, out_directory):
+	out_dir = os.path.abspath(out_directory)
+
 	for p in audio_playlists:
 		content = read_playlist(os.path.abspath(p))
 		status, data = parse_m3u(content)
@@ -29,13 +31,22 @@ def main(audio_playlists, out_directory):
 		if status == False:
 			quit('Something wrong')
 
-		out_dir = os.path.abspath(out_directory)
-
 		# load videos for audio extracting
-		loaded_cache_videos = load_files_from_list(data, video_cache_key, out_dir)
+		loaded_cache_videos = load_files_from_list(data, video_cache_key, out_dir, video_cache_dir)
 		extract_audio(loaded_cache_videos, video_cache_key, out_dir)
+
+	for p in video_playlists:
+		content = read_playlist(os.path.abspath(p))
+		status, data = parse_m3u(content)
+
+		if status == False:
+			quit('Something wrong')
+
+		# load videos for audio appending
+		loaded_videos = load_files_from_list(data, video_key, out_dir, video_dir)
+		print(loaded_videos)
 
 if __name__ == '__main__':
 	args = init_argparser()
 	setup_checks(args.out_dir)
-	main(args.audio_playlists, args.out_dir)
+	main(args.audio_playlists, args.video_playlists, args.out_dir)
