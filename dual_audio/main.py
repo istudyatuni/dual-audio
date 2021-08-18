@@ -9,7 +9,7 @@ from .config import (
 from .converter import extract_audio, append_audios
 from .helpers import setup_checks, get_filenames
 from .loader import load_files_from_list
-from .playlist import read_playlist
+from .m3u.parser import read_playlist
 
 def init_argparser():
 	parser = argparse.ArgumentParser(description='Make dual-audio movie')

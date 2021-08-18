@@ -1,6 +1,6 @@
 import os, re
 
-from .config import video_extension_key, template_keys
+from ..config import video_extension_key, template_keys
 
 sorted_playlist_keys = sorted(['title', 'link', video_extension_key])
 

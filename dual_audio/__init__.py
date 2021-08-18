@@ -3,5 +3,5 @@ from . import (
 	converter,
 	helpers,
 	loader,
-	playlist,
+	m3u,
 )
