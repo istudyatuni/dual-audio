@@ -1,15 +1,15 @@
 import argparse, os, shlex
 
-from config import (
+from .config import (
 	video_cache_key,
 	audio_key, video_key,
 	video_cache_dir, video_dir,
 	video_extension_key
 )
-from converter import extract_audio, append_audios
-from helpers import setup_checks, get_filenames
-from loader import load_files_from_list
-from playlist import read_playlist
+from .converter import extract_audio, append_audios
+from .helpers import setup_checks, get_filenames
+from .loader import load_files_from_list
+from .playlist import read_playlist
 
 def init_argparser():
 	parser = argparse.ArgumentParser(description='Make dual-audio movie')
@@ -31,7 +31,7 @@ def init_argparser():
 
 	return args
 
-def main(
+def load_and_process(
 	audio_playlists, video_playlists,
 	out_dir,
 	preserve_video,
@@ -68,13 +68,16 @@ def main(
 	filenames = get_filenames(audio_index, videos_index)
 	append_audios(filenames, abs_out_dir, preserve_video)
 
-if __name__ == '__main__':
+def main():
 	args = init_argparser()
 	setup_checks(args.out_dir)
-	main(
+	load_and_process(
 		args.audio_playlists,
 		args.video_playlists,
 		args.out_dir,
 		args.preserve_video,
 	)
 	print('Done')
+
+if __name__ == '__main__':
+	main()

@@ -1,6 +1,6 @@
 import os, subprocess
 
-from config import audio_key, video_key, video_dir, finished_files_list
+from .config import audio_key, video_key, video_dir, finished_files_list
 
 def get_system_output(args):
 	return subprocess.Popen(
@@ -11,7 +11,7 @@ def get_system_output(args):
 	).communicate()[0]
 
 def check_system_utilities():
-	from config import needed_utilities as utilities
+	from .config import needed_utilities as utilities
 
 	missing = []
 	for u in utilities:
@@ -32,7 +32,7 @@ def setup_checks(out_directory):
 
 	out_dir = os.path.abspath(out_directory)
 
-	from config import needed_dirs as dirs
+	from .config import needed_dirs as dirs
 	for d in dirs:
 		os.makedirs(os.path.join(out_dir, d), exist_ok=True)
 

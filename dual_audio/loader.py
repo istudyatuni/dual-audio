@@ -1,7 +1,7 @@
 import os
 
-from config import partial_postfix, video_key
-from helpers import is_video_finished
+from .config import partial_postfix, video_key
+from .helpers import is_video_finished
 
 def load_files_from_list(data, filename_key, abs_out_dir, media_dir, extension_key):
 	loaded_files = []

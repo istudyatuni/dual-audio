@@ -1,6 +1,6 @@
 import os, re
 
-from config import (
+from .config import (
 	audio_dir, video_dir,
 	audio_key, video_key,
 	video_cache_dir,
@@ -8,7 +8,7 @@ from config import (
 	partial_postfix,
 	finished_files_list,
 )
-from helpers import get_system_output, is_video_finished
+from .helpers import get_system_output, is_video_finished
 
 def check_audio_format(filepath):
 	"""
