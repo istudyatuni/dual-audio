@@ -71,6 +71,9 @@ def append_audios(filenames, abs_out_dir, preserve_video):
 			continue
 
 		# https://stackoverflow.com/a/11783474
+		# looks like audio fits to video duration (if check duration with ffprobe for aac,
+		# for example, it return 'Estimating duration from bitrate, this may be inaccurate')
+		# maybe because video is written before audio
 		result = os.system(f"""
 			ffmpeg \
 			-i '{video_path}' \

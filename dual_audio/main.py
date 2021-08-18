@@ -38,6 +38,8 @@ def main(
 ):
 	abs_out_dir = os.path.abspath(out_dir)
 
+	audio_index, videos_index = [], []
+
 	for p in audio_playlists:
 		data = read_playlist(os.path.abspath(p))
 
@@ -49,13 +51,13 @@ def main(
 			video_cache_dir,
 			video_extension_key,
 		)
-		audio_index = extract_audio(loaded_cache_videos, video_cache_key, abs_out_dir)
+		audio_index += extract_audio(loaded_cache_videos, video_cache_key, abs_out_dir)
 
 	for p in video_playlists:
 		data = read_playlist(os.path.abspath(p))
 
 		# load videos for audio appending
-		videos_index = load_files_from_list(
+		videos_index += load_files_from_list(
 			data,
 			video_key,
 			abs_out_dir,
