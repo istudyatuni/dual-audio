@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 
 setup(
   name = 'dual-audio',
-  version = '1.0',
+  version = '1.1',
   description = 'Make videos with double audio',
   long_description = long_description,
   long_description_content_type = 'text/markdown',
