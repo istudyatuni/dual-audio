@@ -22,16 +22,36 @@ dual-audio --out-dir . -a audio-playlist.m3u -v video-playlist.m3u
 
 Number of entries in both audio and video playlists should be equal.
 
+After downloading and converting, you may also want to specify a language for each audio track. Create a file with filenames to do this mapping, e.g. `list.txt` (or use `finished.txt`), then if the first audio track is russian and the second is english, run:
+
+```bash
+dual-audio \
+	--fix-audio-lang \
+	--fix-audio-lang-list list.txt \
+	--first-audio-lang rus \
+	--second-audio-lang eng
+```
+
+First track from video playlist, second from audio playlist.
+
 ## CLI arguments
 
-| Argument                | Action                                                      |
-|:------------------------|:------------------------------------------------------------|
-| `-d, --out-dir`         | Directory where place audio and video folders               |
-| `-a, --audio-playlists` | Path(s) to playlist(s) with videos from which extract audio |
-| `-v, --video-playlists` | Path(s) to playlist(s) with videos to add a second audio    |
-| `--args`                | Pass shell arguments via file                               |
-| `--preserve-video`      | Preserving original videos from `video-playlists`           |
-| `-h, --help`            | Show help message and exit                                  |
+| Argument                | Action                                                       |
+|:------------------------|:-------------------------------------------------------------|
+| `-d, --out-dir`         | Directory where place audio and video folders                |
+| `-a, --audio-playlists` | Path(s) to playlist(s) with videos from which extract audio  |
+| `-v, --video-playlists` | Path(s) to playlist(s) with videos to add a second audio     |
+| `--args`                | Pass shell arguments via file                                |
+| `--preserve-video`      | Preserving original videos from `video-playlists`            |
+| `-h, --help`            | Show help message and exit                                   |
+| `--fix-audio-lang`      | Fix audio tracks language metadata <sup>1</sup>              |
+| `--fix-audio-lang-list` | File with list of filenames to fix language                  |
+| `--first-audio-lang`    | Language in first audio track (from video file) <sup>2</sup> |
+| `--second-audio-lang`   | Language in second audio track (from extracted audio)        |
+
+<sup>1</sup> If specified, downloading and converting will not be performed.
+
+<sup>2</sup> Language is 3-letter identifier like "eng" or "rus".
 
 ## Shortened M3U playlist syntax
 

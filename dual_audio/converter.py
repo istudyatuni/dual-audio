@@ -8,7 +8,7 @@ from .config import (
 	partial_postfix,
 	finished_files_list,
 )
-from .helpers import get_system_output, is_video_finished
+from .helpers import get_system_output, is_video_finished, read_file_lines
 
 def check_audio_format(filepath):
 	"""
@@ -44,6 +44,7 @@ def extract_audio(videos, cache_key, abs_out_dir):
 			ffmpeg \
 			-i '{video_cache_file}' \
 			-map 0:a:0 \
+			-map_metadata 0 \
 			-c copy '{audio_path}'
 		""")
 
@@ -96,7 +97,7 @@ def append_audios(filenames, abs_out_dir, preserve_video):
 		else:
 			# ffmpeg can't continue converting, only from beginning
 			os.system(f"rm '{out_file}'")
-			quit(f'result code: {result}')
+			quit(f'ffmpeg exit with code {result}')
 
 	if not preserve_video:
 		move_videos(filenames, abs_out_dir)
@@ -113,3 +114,27 @@ def move_videos(filenames, abs_out_dir):
 		finished_file = os.path.join(video_folder, finished_files_list)
 		os.system(f"mv '{out_file}' '{video_path}'")
 		os.system(f"echo '{file[video_key]}' >> '{finished_file}'")
+
+def set_audio_tracks_lang(file: str, first_lang: str, second_lang: str):
+	""" lang is 3 letter identifier, e.g. `eng`, `rus` etc """
+	series = read_file_lines(file)
+	for s in series:
+		copy = 'copy-' + s
+
+		result = os.system(f"""
+		ffmpeg \
+			-i '{s}' \
+			-map 0 \
+			-c copy \
+			-metadata:s:a:0 language={first_lang} \
+			-metadata:s:a:1 language={second_lang} \
+			'{copy}'
+		""")
+
+		if result == 0:
+			# success
+			os.system(f"mv '{copy}' '{s}'")
+		elif result == 65280:
+			quit('Exiting')
+		else:
+			print('result code:', result)

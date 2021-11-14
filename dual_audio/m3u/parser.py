@@ -1,12 +1,9 @@
-import os, re
+import re
 
-from ..config import video_extension_key, template_keys
+from ..config import video_extension_key
+from ..helpers import read_file_lines
 
 sorted_playlist_keys = sorted(['title', 'link', video_extension_key])
-
-def read_file_lines(name):
-	with open(name) as f:
-		return [x.strip() for x in f.readlines()]
 
 def parse_playlist(content):
 	if len(content) == 0 or not re.match(r'#EXTM3U', content[0]):

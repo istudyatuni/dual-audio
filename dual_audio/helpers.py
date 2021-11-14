@@ -10,6 +10,10 @@ def get_system_output(args):
 		universal_newlines=True,  # return string not bytes
 	).communicate()[0]
 
+def read_file_lines(name: str):
+	with open(name) as f:
+		return [x.strip() for x in f.readlines()]
+
 def check_system_utilities():
 	from .config import needed_utilities as utilities
 
@@ -27,7 +31,7 @@ def check_system_utilities():
 
 	quit()
 
-def setup_checks(out_directory):
+def setup_checks(out_directory: str):
 	check_system_utilities()
 
 	out_dir = os.path.abspath(out_directory)
